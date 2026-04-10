@@ -5,12 +5,14 @@ import sly
 
 from errors import error, errors_detected
 
+class LexicalError(Exception):
+	...
 
 class Lexer(sly.Lexer):
 	tokens = {
 		# keywords
-		ARRAY, AUTO, BOOLEAN, CHAR, CONSTANT,ELSE, FALSE, 
-		FLOAT, FOR, FUNCTION, IF, INTEGER, PRINT, RETURN,
+		ARRAY, AUTO, BOOLEAN, CHAR, CLASS, CONSTANT,ELSE, FALSE, 
+		FLOAT, FOR, FUNCTION, IF, INTEGER, NEW, PRINT, RETURN,
 		STRING, TRUE, VOID, WHILE, BREAK, CONTINUE,
 		
 		# operator
@@ -19,9 +21,9 @@ class Lexer(sly.Lexer):
 		ADDEQ, SUBEQ, MULEQ, DIVEQ, MODEQ,
 		
 		# other tokens
-		ID, CHAR_LITERAL, FLOAT_LITERAL, INTEGER_LITERAL, STRING_LITERAL,
+		ID, CHAR_LITERAL, FLOAT_LITERAL, INTEGER_LITERAL, STRING_LITERAL
 	}
-	literals = '+-*/%^=:;,()[]{}!'
+	literals = '+-*/%^=:;.,()[]{}!?'
 
 	# ignore
 	ignore = ' \t\r'
@@ -72,6 +74,7 @@ class Lexer(sly.Lexer):
 	ID['auto']     = AUTO
 	ID['boolean']  = BOOLEAN
 	ID['char']     = CHAR
+	ID['class']    = CLASS
 	ID['constant'] = CONSTANT
 	ID['else']     = ELSE
 	ID['false']    = FALSE
@@ -80,6 +83,7 @@ class Lexer(sly.Lexer):
 	ID['function'] = FUNCTION
 	ID['if']       = IF
 	ID['integer']  = INTEGER
+	ID['new']	   = NEW
 	ID['print']    = PRINT
 	ID['return']   = RETURN
 	ID['string']   = STRING
@@ -124,7 +128,8 @@ class Lexer(sly.Lexer):
 		return t
 	
 	def error(self, t):
-		error(f"Carcater Ilegal '{t.value[0]}'", t.lineno)
+		#print(f"Línea {self.lineno}: Caracter Inválido {t.value[0]}")
+		error(f"Caracter Ilegal '{t.value[0]}'", t.lineno)
 		self.index += 1
 
 
@@ -157,18 +162,9 @@ if __name__ == '__main__':
 	if sys.platform != 'ios':
 		
 		if len(sys.argv) != 2:
-			raise SystemExit("Usage: python glexer.py <filename>")
+			raise SystemExit("Usage: python lexer.py <filename>")
 		
 		filename = sys.argv[1]
-		
-	else:
-		from File_Picker import file_picker_dialog
-	
-		filename = file_picker_dialog(
-			title='Seleccionar una archivo',
-			root_dir='./test/cool/',
-			file_pattern='^.*[.]bminor'
-		)
 
 	if filename:
 		tokenize(filename)

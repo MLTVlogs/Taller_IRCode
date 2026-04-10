@@ -3,11 +3,11 @@
 var: integer;
 
 main: function void () = {
-    new: float = 3.14;
-    if (new + 1.1)
-        new++;
+    newvar: float = 3.14;
+    if (newvar + 1.1)
+        newvar++;
     else
-        new--;
+        newvar--;
 
     if (var && var)
         var++;
