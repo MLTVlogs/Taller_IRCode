@@ -461,7 +461,6 @@ class Checker(Visitor):
 	def visit_Continue(self, n):
 		pass
 
-
 if __name__ == "__main__":
     import sys
     from parser import parse
